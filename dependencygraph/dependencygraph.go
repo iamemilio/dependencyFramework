@@ -20,11 +20,8 @@ type Node struct {
 	*status              // nil = not run, false = passed, true = failed
 }
 
-func NewNode(name string) (*Node, error) {
-	if name == "" {
-		return nil, errors.New("Node must have a name")
-	}
-	return &Node{name: name}, nil
+func NewNode(name string) *Node {
+	return &Node{name: name}
 }
 
 func (m *Node) Pass() error {
@@ -65,7 +62,7 @@ func (m *Node) Fail() error {
 	}
 
 	visited := make(map[string]bool)
-	visited[m.name] = true
+	visited[m.name] = true // prevents mutex blocking in the case of a circular dependency
 
 	for nodes.Len() != 0 {
 		node, _ := nodes.Pop()
@@ -109,7 +106,12 @@ func (m *Node) DependsOn(dep *Node) error {
 // DependsOnList is a convenience function that allows you to pass a list of nodes
 // to add to a node's dependencies
 func (m *Node) DependsOnList(deps []*Node) error {
+	seen := map[string]bool{}
 	for _, dep := range deps {
+		if seen[dep.name] {
+			return fmt.Errorf("%s is a duplicate dependency", dep.name)
+		}
+		seen[dep.name] = true
 		err := m.DependsOn(dep)
 		if err != nil {
 			return err

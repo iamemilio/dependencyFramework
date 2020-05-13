@@ -8,14 +8,14 @@ import (
 
 func main() {
 	// Basic test case
-	a, _ := graph.NewNode("a")
-	b, _ := graph.NewNode("b")
-	c, _ := graph.NewNode("c")
-	d, _ := graph.NewNode("d")
-	e, _ := graph.NewNode("e")
-	f, _ := graph.NewNode("f")
-	g, _ := graph.NewNode("g")
-	h, _ := graph.NewNode("h")
+	a := graph.NewNode("a")
+	b := graph.NewNode("b")
+	c := graph.NewNode("c")
+	d := graph.NewNode("d")
+	e := graph.NewNode("e")
+	f := graph.NewNode("f")
+	g := graph.NewNode("g")
+	h := graph.NewNode("h")
 
 	// a-----b---------c-----g
 	//	      \         \
